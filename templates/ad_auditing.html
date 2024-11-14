@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Directory User Retrieval</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- SheetJS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <p align="right"> <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>&nbsp;&nbsp;</p>
+    <h1 style="text-align: center;">AD Domain User Auditing Tools</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; max-width: 1000px; margin-left: 10px;">
+        <!-- Active Directory User Retrieval Form -->
+        <div style="flex: 1; min-width: 300px; background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <h2>Active Directory User Retrieval</h2>
+            <form method="POST" style="margin-top: 20px;">
+                <label for="username" style="font-weight: bold;">Username:</label>
+                <input type="text" id="username" name="username" placeholder="User with domain admin level" required style="width: 100%; padding: 5px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 3px;">
+                
+                <label for="password" style="font-weight: bold;">Password:</label>
+                <input type="password" id="password" name="password" required style="width: 100%; padding: 5px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 3px;">
+                
+                <label for="domain" style="font-weight: bold;">Domain:</label>
+                <input type="text" id="domain" name="domain" placeholder="example.com" required style="width: 100%; padding: 5px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 3px;">
+                
+                <label for="ad_server" style="font-weight: bold;">AD Server:</label>
+                <input type="text" id="ad_server" name="ad_server" required style="width: 100%; padding: 5px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 3px;">
+                
+                <label for="base_dn" style="font-weight: bold;">Base DN:</label>
+                <input type="text" id="base_dn" name="base_dn" placeholder="DC=example,DC=com" required style="width: 100%; padding: 5px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 3px;">
+                
+                <button type="submit" style="padding: 12px; background-color: #5a67d8; color: white; border: none; border-radius: 3px; cursor: pointer; width: 100%;">Retrieve Users</button>
+            </form>
+        </div>
+        
+        <!-- Right Panel for Search and Export -->
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; max-width: 1000px;">
+            <!-- Search Form -->
+            <div style="flex: 1; min-width: 500px; background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <h2>Search AD Users</h2>
+                <form action="{{ url_for('ad_auditing') }}" method="GET" style="display: flex; gap: 10px;">
+                    <input type="text" id="search" name="search" placeholder="Search by username or member of" value="{{ request.args.get('search', '') }}" style="flex: 1; padding: 10px; border-radius: 3px; border: 1px solid #ddd;">
+                    <button type="submit" style="padding: 10px; background-color: #5a67d8; color: white; border: none; border-radius: 3px; cursor: pointer;">Search</button>
+                </form>
+                <br>
+                <!-- Export and Summary Buttons -->
+                <div style="display: flex; flex-direction: row; gap: 10px;" >
+                    <button onclick="exportToExcel()" style="padding: 12px; background-color: #ffb233; color: black; border: none; border-radius: 3px; cursor: pointer; width: 100%;">Export to Excel</button>
+                    <button id="Summary" style="padding: 12px; background-color: #ffb233; color: black; border: none; border-radius: 3px; cursor: pointer; width: 100%;">Summary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+<div style="flex: 1; margin-left: 10px; margin-right: 10px;">
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Domain</th>
+                <th onclick="sortTable(1)">Username</th>
+                <th onclick="sortTable(2)">Display Name</th>
+                <th onclick="sortTable(3)">Type</th>
+                <th onclick="sortTable(4)">Status</th>
+                <th onclick="sortTable(5)">Member Of</th>
+                <th onclick="sortTable(6)">Last Login</th>
+                <th onclick="sortTable(7)">Last Password Change</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            {% if users %}
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user['domainname'] }}</td>
+                        <td>{{ user['username'] }}</td>
+                        <td>{{ user['display_name'] }}</td>
+                        <td>{{ user['tipe'] }}</td>
+                        <td>{{ user['status'] }}</td>
+                        <td>{{ user['member_of'] }}</td>
+                        <td>{{ user['last_login'].strftime('%Y-%m-%d %H:%M:%S') if user['last_login'] else 'N/A' }}</td>
+                        <td>{{ user['last_password_change'].strftime('%Y-%m-%d %H:%M:%S') if user['last_password_change'] else 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="8">No results found for your search.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+    <br>
+    <div class="pagination" style="margin-left: 10px;">
+        <button onclick="prevPage()" id="prevButton" disabled>Previous</button>
+        <button onclick="nextPage()" id="nextButton">Next</button>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    <script>
+        const rowsPerPage = 25;
+        let currentPage = 1;
+        let tableData = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const table = document.getElementById("userTableBody");
+            tableData = Array.from(table.rows).map(row => Array.from(row.cells).map(cell => cell.innerText));
+            paginateTable();
+        });
+
+        function paginateTable() {
+            const table = document.getElementById("userTableBody");
+            table.innerHTML = "";
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const rows = tableData.slice(start, end);
+
+            rows.forEach(rowData => {
+                const row = table.insertRow();
+                rowData.forEach(cellData => {
+                    const cell = row.insertCell();
+                    cell.textContent = cellData;
+                });
+            });
+
+            updatePaginationButtons();
+        }
+
+        function updatePaginationButtons() {
+            const totalRows = tableData.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            document.getElementById("prevButton").disabled = currentPage === 1;
+            document.getElementById("nextButton").disabled = currentPage === totalPages;
+        }
+
+        function nextPage() {
+            currentPage++;
+            paginateTable();
+        }
+
+        function prevPage() {
+            currentPage--;
+            paginateTable();
+        }
+
+        function sortTable(columnIndex) {
+            tableData.sort((a, b) => {
+                const cellA = a[columnIndex];
+                const cellB = b[columnIndex];
+
+                if (!isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))) {
+                    return new Date(cellA) - new Date(cellB);
+                } else if (!isNaN(cellA) && !isNaN(cellB)) {
+                    return Number(cellA) - Number(cellB);
+                } else {
+                    return cellA.localeCompare(cellB);
+                }
+            });
+            currentPage = 1;
+            paginateTable();
+        }
+
+        function exportToExcel() {
+            const table = document.getElementById('userTable');
+            const workbook = XLSX.utils.table_to_book(table, { sheet: "Users" });
+            XLSX.writeFile(workbook, 'AD_users.xlsx');
+        }
+
+        document.getElementById("Summary").addEventListener("click", function() {
+            window.location.href = "{{ url_for('export_summary') }}";
+        }); 
+
+        // Menunggu beberapa detik sebelum menyembunyikan pesan
+        setTimeout(function() {
+            const flashMessages = document.getElementById("flash-messages");
+            if (flashMessages) {
+                flashMessages.style.transition = "opacity 0.5s ease";
+                flashMessages.style.opacity = "0"; // Mengatur transparansi ke 0
+            setTimeout(() => flashMessages.style.display = "none", 500); // Menyembunyikan elemen setelah transisi selesai
+            }
+        }, 2000); // Mengatur waktu tunggu 3 detik (3000 ms)
+
+    </script>
+        <footer>
+            <p>&copy; 2024 IT Security PBRX</p>
+        </footer>
+</body>
+</html>

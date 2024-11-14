@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Dashboard</h1>
+        <!-- Menambahkan gambar profil pengguna -->
+        <img src="{{ url_for('static', filename='user.png') }}" alt="User Profile Picture" class="user-image">       
+        <p>Hello, {{ username }}!</p>
+        <a href="{{ url_for('logout') }}" class="btn" aria-label="Logout">Logout</a>
+    </header>
+
+    <div class="dashboard-wrapper">
+        <section>
+            <div class="dashboard-container">
+                <div class="card">
+                    <h2>User Manager</h2>
+                    <p>Manage registered users, add new users, and edit user information.</p>
+                    <a href="{{ url_for('user_manager') }}" class="btn" aria-label="User Manager">GO</a>
+                </div>
+                
+                <div class="card">
+                    <h2>AD Domain Auditing</h2>
+                    <p>Summary of Domain User, Last Login, and Last Password Change.</p>
+                    <a href="{{ url_for('ad_auditing') }}" class="btn" aria-label="AD Domain Auditing">GO</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 IT Security PBRX</p>
+    </footer>
+
+</body>
+</html>

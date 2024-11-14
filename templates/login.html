@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Domain AD Auditing Tools</h1>
+  </header>  
+    <h2><center>Login</center></h2>
+      <form method="POST" action="/">
+          <label>Username:</label>
+          <input type="text" name="username" required><br>
+          <label>Password:</label>
+          <input type="password" name="password" required><br>
+          <button type="submit">Login</button>
+          {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+            <div id="flash-messages" class="alert-container">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% endwith %}
+      </form>
 
+    <script>
+      // Menunggu beberapa detik sebelum menyembunyikan pesan
+      setTimeout(function() {
+        const flashMessages = document.getElementById("flash-messages");
+        if (flashMessages) {
+          flashMessages.style.transition = "opacity 0.5s ease";
+          flashMessages.style.opacity = "0"; // Mengatur transparansi ke 0
+          setTimeout(() => flashMessages.style.display = "none", 500); // Menyembunyikan elemen setelah transisi selesai
+        }
+      }, 2000); // Mengatur waktu tunggu 3 detik (3000 ms)
+    </script>
+        <footer>
+          <p>&copy; 2024 IT Security PBRX</p>
+      </footer>
+</body>
+</html>
