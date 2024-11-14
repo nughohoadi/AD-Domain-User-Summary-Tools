@@ -1,0 +1,299 @@
+/* Reset dan dasar */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+form {
+    max-width: 500px; /* Batasi lebar form */
+    margin: 0 auto; /* Tengah-tengah form secara horizontal */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.tombol {
+    margin: 0 auto; /* Tengah-tengah form secara horizontal */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px; /* Spasi antara label dan input */
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px 0; /* Margin di bawah input agar ada spasi antar elemen */
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Agar padding dihitung dalam lebar elemen */
+}
+
+button {
+    padding: 12px 15px;
+    background-color: #5a67d8;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100px; /* Membuat tombol lebar penuh */
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #434190;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+.delete-btn {
+    background-image: url('/static/delete.png'); /* Path ke gambar */
+    background-size: contain; /* Mengatur ukuran gambar agar pas di tombol */
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 24px; /* Sesuaikan ukuran sesuai kebutuhan */
+    height: 24px;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    background-color: #ffffff;
+    transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+    transform: scale(1.1); /* Efek zoom saat hover */
+    background-color: #ffffff;
+}
+/* CSS untuk tabel */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+table thead tr {
+    background-color: #5a67d8;
+    color: #ffffff;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 3px 3px;
+    border: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #5a67d8;
+}
+
+/* Kontainer Dashboard */
+.dashboard-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    max-width: 1800px;
+    margin: auto;
+    justify-content: space-between;
+    gap: 20px; /* Memberikan jarak antara card */
+}
+.dashboard-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2em;
+}
+
+header p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+/* Kartu Konten */
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 60%;
+    max-width: 500px;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.card a.button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #5a67d8;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.card a.button:hover {
+    background-color: #434190;
+}
+
+/* Tombol */
+.btn {
+    text-decoration: none;
+    color: #fff;
+    background-color: #5a67d8;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #434190;
+}
+
+/* Footer */
+footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #888;
+}
+
+footer a {
+    color: #4a90e2;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+footer a.button {
+    margin-top: 20px;
+}
+
+.alert-container {
+    margin: 20px 0;
+}
+
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    position: relative; /* Position for the close button */
+    animation: fadeIn 0.5s; /* Animation for fading in */
+}
+
+.alert i {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    align-items: center;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    align-items: center;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    align-items: center;
+}
+
+.alert-dismissible .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: inherit; /* Inherit color from the alert */
+}
+
+.alert-dismissible .close:hover {
+    color: #000; /* Change color on hover */
+}
+
+/* Tambahkan transisi dan kondisi ketika opasitas 0 */
+#flash-messages {
+  transition: opacity 0.5s ease; /* Transisi untuk memudar */
+}
+#flash-messages.fade-out {
+  opacity: 0; /* Opasitas 0 untuk memudar */
+}
